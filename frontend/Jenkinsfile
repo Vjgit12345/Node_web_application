@@ -12,7 +12,7 @@ pipeline {
         }
         stage('Build_Image') {
             steps {
-                sh 'docker build -t frondend_app:$BUILD_NUMBER ./frontend'
+                sh 'docker build -t vijayramdoc/vijay_repo1:$BUILD_NUMBER ./frontend'
             }
         }
         stage('Docker login') {
