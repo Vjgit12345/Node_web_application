@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+    environment{
+        DOCKERHUB_CREDS = credentials('Dockerhub')
+    }
+        stages {
+        stage('Clone the repo') {
+            steps {
+                checkout scm
+                sh 'ls *'
+            }
+        }
+        stage('Build_Image') {
+            steps {
+                sh 'docker build -t backend_app:$BUILD_NUMBER ./backend/'
+            }
+        }
+        stage('Docker login') {
+            steps {
+                sh 'echo $DOCKERHUB_CREDS_PSW | docker login -u $DOCKERHUB_CREDS_USR --password-stdin '
+            }
+        }    
+        stage('Docker push') {
+            steps {
+                 sh 'docker push vijayramdoc/node_app1:$BUILD_NUMBER'
+            }
+        }
+    }
+    post {
+            always {
+                    sh 'docker logout'
+            }
+    }
+}
